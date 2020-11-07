@@ -1,8 +1,7 @@
 # -*- coding: utf-8 -*-
 # 引数（名前, 入退室日時）
+
 # requestsのインストールが必要
-
-
 import requests
 import json
 import sys
