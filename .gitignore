@@ -1,2 +1,4 @@
 .DS_store
 *cfg.json
+*.jpg
+*.pyc
