@@ -6,6 +6,9 @@ import requests
 import time
 import line_func
 import db_func
+import access_manage
+import datetime
+from datetime import datetime as dt
 
 
 class face_rec:
@@ -17,6 +20,9 @@ class face_rec:
 
         # LINE機能を使うためのインスタンス
         self.line = line_func.line_func()
+
+        # 入退室情報を管理機能
+        self.access = access_manage.access()
        
 
     def get_user_list(self):
@@ -41,6 +47,9 @@ class face_rec:
             }
 
             self.user_info.append(user_dic)
+
+
+        return self.user_info
     
 
     def recognition(self):
@@ -76,8 +85,6 @@ class face_rec:
                 minNeighbors = 5,
                 minSize = (int(minW), int(minH)),
             )
-
-            
             
             for(x,y,w,h) in faces:
 
@@ -97,18 +104,17 @@ class face_rec:
                     # user_name = self.user_dic["user_info"]["user_name"]
                     confidence = "  {0}%".format(round(100 - confidence))
                 else:
-                    # id = "unknown"
                     user_name = "unknown"
                     confidence = "  {0}%".format(round(100 - confidence))
                     match_count = 0
                 
-                # if prev_id == id:
-                if prev_user_name == user_name:
+                if prev_user_name == user_name and not user_name=="unknown":
                     match_count = match_count + 1
-                    time.sleep(1)
 
-                if match_count >= 5:
-                    self.line.line_push(match_user, "")
+                if match_count >= 10:
+                    # self.line.line_push(match_user, "")
+                    access_flag = self.access.access_manage(match_user)
+                    self.line.detect_push(match_user, access_flag)
                     match_count = 0
 
                 
@@ -128,8 +134,18 @@ class face_rec:
         cam.release()
         cv2.destroyAllWindows()
 
+
+    def main(self):
+        # self.access.exit_manage()
+        face_rec.get_user_list()
+        face_rec.recognition()
+        
 if __name__ == "__main__":
     face_rec = face_rec()
+    face_rec.main()
 
-    face_rec.get_user_list()
-    face_rec.recognition()
+    # user_info = face_rec.get_user_list()
+    
+
+    # face_rec.access_manage(user_info[0])
+

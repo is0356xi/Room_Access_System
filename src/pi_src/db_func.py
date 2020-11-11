@@ -9,11 +9,11 @@ class db_func:
 
         # コネクションの作成
         self.conn = mydb.connect(
-            user='username',
-            host='hostname',
+            user='ras',
+            host='192.168.100.68',
             port='3306',
-            password='password',
-            database='dbname'
+            password='InfoNetworking',
+            database='ras_db'
         )
 
         # コネクションが切れた時に再接続してくれるよう設定
@@ -56,7 +56,8 @@ class db_func:
                 """
                 CREATE TABLE IF NOT EXISTS {0} (
                 `id` int not null,
-                `entr_time` datetime,
+                `date` date not null,
+                `entry_time` datetime,
                 `exit_time` datetime
                 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci
                 """.format(table)
@@ -161,6 +162,23 @@ class db_func:
         return get_value
 
 
+    def get_access_info(self, field_name, wh_field, value):
+        # DB操作用にカーソルを作成
+        cur = self.conn.cursor()
+        
+        query = "SELECT {0} FROM access where {1} = '{2}';".format(
+            field_name, 
+            wh_field, 
+            value
+        )
+
+        cur.execute(query)
+        get_value = cur.fetchall()
+
+        # 取得した値を返す
+        return get_value
+
+
 
     def update_where(self, table_name, field_name, value, user_id):
         try:
@@ -173,8 +191,6 @@ class db_func:
                 value,
                 user_id
                 )
-
-            cur.execute(query)
         
             # 実行&コミット
             cur.execute(query)
@@ -198,14 +214,63 @@ class db_func:
             return True
         else:
             return False
+    
 
+    def access_info_manage(self, user_id, date, access_time, entry_flag=False):
+        cur = self.conn.cursor()
+
+        # flagが「入室」の場合
+        if entry_flag:
+            # クエリの作成
+            query = """
+                INSERT INTO access (id, date, entry_time) 
+                VALUES ({0}, '{1}', '{2}');
+                """.format(user_id, date, access_time)
+        else:
+            query = """
+                UPDATE access SET exit_time = '{0}' 
+                WHERE date = '{1}' and id = {2} ;
+                """.format(access_time, date, user_id)
+
+        # 実行&コミット
+        cur.execute(query)
+        self.conn.commit()
+    
+
+    def get_user_list(self, user_id_list):
+        cur = self.conn.cursor()
+
+        if user_id_list == 1:
+            query = """
+            SELECT id, full_name, student_id, token FROM user where id = {0};
+            """.format(user_id_list)
+        else:
+            query = """
+            SELECT id, full_name, student_id, token FROM user where id in {0};
+            """.format(user_id_list)
+
+        cur.execute(query)
+        get_value = cur.fetchall()
+
+        # 取得した値を返す
+        return get_value
+            
     def reset_table(self):
-        self.create_table("user", "user")
-        self.create_table("access", "access")
-
-
-
+        # self.create_table("user", "user")
+        # self.create_table("access", "access")
+        pass        
+    
 
 
 if __name__ == "__main__":
     db = db_func()
+
+    
+
+    field_name = "token"
+    table_name = "user"
+    wh_field = "name"
+
+    # db.get_user_id("Komiya")
+    # db.get_where(field_name, table_name, wh_field, "Komiya")
+    db.reset_table()
