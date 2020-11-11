@@ -143,7 +143,7 @@ class capture_db():
         img_num_init = img_num
 
         # 写真撮影回数
-        take_num = 30
+        take_num = 99
 
         # 撮影回数をupdateするのに必要な情報
         table_name = "user"
@@ -212,4 +212,3 @@ class capture_db():
 if __name__ == "__main__":
     cap = capture_db()
     cap.main()
-
