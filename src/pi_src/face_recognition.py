@@ -7,6 +7,7 @@ import time
 import line_func
 import db_func
 import access_manage
+import audio_output
 import datetime
 from datetime import datetime as dt
 
@@ -23,6 +24,9 @@ class face_rec:
 
         # 入退室情報を管理機能
         self.access = access_manage.access()
+
+        # ユーザ名を叫ぶためのやつ
+        self.ao = audio_output.audio_output()
        
 
     def get_user_list(self):
@@ -102,26 +106,28 @@ class face_rec:
                             break
 
                     # user_name = self.user_dic["user_info"]["user_name"]
-                    confidence = "  {0}%".format(round(100 - confidence))
+                    confidence_str = "  {0}%".format(round(100 - confidence))
                 else:
                     user_name = "unknown"
-                    confidence = "  {0}%".format(round(100 - confidence))
+                    confidence_str = "  {0}%".format(round(100 - confidence))
                     match_count = 0
                 
-                if prev_user_name == user_name and not user_name=="unknown":
+                if prev_user_name == user_name and not user_name=="unknown"  and (100-confidence) >= 15:
                     match_count = match_count + 1
+                else:
+                    match_count = 0
 
-                if match_count >= 10:
+                if match_count >= 3:
                     # self.line.line_push(match_user, "")
                     access_flag = self.access.access_manage(match_user)
-                    self.line.detect_push(match_user, access_flag)
+                    # self.line.detect_push(match_user, access_flag)
+                    self.ao.user_scream(user_name)
                     match_count = 0
 
-                
                 prev_user_name = user_name
                 
                 cv2.putText(img, user_name, (x+5,y-5), font, 1, (255,255,255), 2)
-                cv2.putText(img, str(confidence), (x+5,y+h-5), font, 1, (255,255,0), 1)  
+                cv2.putText(img, str(confidence_str), (x+5,y+h-5), font, 1, (255,255,0), 1)  
             
             cv2.imshow('camera',img) 
 
