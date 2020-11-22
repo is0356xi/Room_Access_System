@@ -121,8 +121,24 @@ class db_func:
 
     def get_where(self, field_name, table_name, wh_field, value, not_flag=False):
         # DB操作用にカーソルを作成
-        cur = self.conn.cursor()
+        try:
+            cur = self.conn.cursor()
+        except:
+            # コネクションの作成
+            self.conn = mydb.connect(
+                user='ras',
+                host='192.168.100.68',
+                port='3306',
+                password='InfoNetworking',
+                database='ras_db'
+            )
+            # コネクションが切れた時に再接続してくれるよう設定
+            self.conn.ping(reconnect=True)
 
+            # 接続できているかどうか確認
+            print("get_where : {0}".format(self.conn.is_connected()))
+                
+        
         if type(value) is str:
             if not_flag:
                 query = "SELECT {0} FROM {1} where {2} != '{3}';".format(

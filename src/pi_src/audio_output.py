@@ -5,7 +5,7 @@ from subprocess import PIPE
 
 class audio_output():
     def user_scream(self, user_name):
-        proc = subprocess.run('./aquestalkpi/AquesTalkPi "{0}" | aplay'.format(user_name), 
+        proc = subprocess.run('~/RAS_src/aquestalkpi/AquesTalkPi "{0}" | aplay'.format(user_name), 
             shell=True, stdout=PIPE, stderr=PIPE, text=True)
 
 if __name__ == "__main__":

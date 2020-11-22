@@ -160,7 +160,7 @@ class capture_db():
 
                 gray = cv2.cvtColor(img,cv2.COLOR_BGR2GRAY)
 
-                cascadePath = "Cascades/haarcascade_frontalface_default.xml"
+                cascadePath = "/home/pi/RAS_src/Cascades/haarcascade_frontalface_default.xml"
                 faceCascade = cv2.CascadeClassifier(cascadePath);
 
                 # 顔検出を行う
