@@ -8,6 +8,7 @@ import line_func
 import db_func
 import access_manage
 import audio_output
+import kafka_func
 import datetime
 from datetime import datetime as dt
 
@@ -27,6 +28,10 @@ class face_rec:
 
         # ユーザ名を叫ぶためのやつ
         self.ao = audio_output.audio_output()
+
+        # kafka用
+        topic_name = "test"
+        self.kafka = kafka_func.kafka_func(topic_name, True)
        
 
     def get_user_list(self):
@@ -58,8 +63,8 @@ class face_rec:
 
     def recognition(self):
         recognizer = cv2.face.LBPHFaceRecognizer_create()
-        recognizer.read('trainer/trainer.yml')
-        cascadePath = "Cascades/haarcascade_frontalface_default.xml"
+        recognizer.read('/home/pi/RAS_src/trainer/trainer.yml')
+        cascadePath = "/home/pi/RAS_src/Cascades/haarcascade_frontalface_default.xml"
         faceCascade = cv2.CascadeClassifier(cascadePath)
 
         font = cv2.FONT_HERSHEY_SIMPLEX
@@ -120,6 +125,7 @@ class face_rec:
                 if match_count >= 3:
                     # self.line.line_push(match_user, "")
                     access_flag = self.access.access_manage(match_user)
+                    self.kafka.send_json(match_user)
                     # self.line.detect_push(match_user, access_flag)
                     self.ao.user_scream(user_name)
                     match_count = 0
