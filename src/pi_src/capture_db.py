@@ -50,13 +50,15 @@ class capture_db():
             value = input('Enter y or n: ')
 
             if value == "y":
-                student_id = input('Enter Your StudentID (ハイフン入れたらぶっ飛ばすぞって): ')
+                student_id = input('Enter Your StudentID (ハイフン入れたら怒るよ？): ')
                 full_name = input('Enter Your Full Name: ')
                 token = input('Enter Your Token: ')
+                mac_addr = input('Enter Your MAC-Address (aa:bb:cc:dd:ee:ff) : ')
 
                 self.user_info.append(student_id)
                 self.user_info.append(full_name)
                 self.user_info.append(token)
+                self.user_info.append(mac_addr)
             else:
                 print("一昨日きやがれ")  
                 sys.exit(0)
@@ -98,11 +100,12 @@ class capture_db():
         student_id = self.user_info[1]
         full_name = self.user_info[2]
         token = self.user_info[3]
+        mac_addr = self.user_info[4]
 
         # 新規ユーザの場合
         if new_user:
             # ユーザを作成
-            self.db.create_user(student_id,user_name,full_name,token)
+            self.db.create_user(student_id,user_name,full_name,token, mac_addr)
 
             # 作成したユーザのidを取得する
             user_id = self.db.get_user_id(user_name)
@@ -160,7 +163,7 @@ class capture_db():
 
                 gray = cv2.cvtColor(img,cv2.COLOR_BGR2GRAY)
 
-                cascadePath = "/home/pi/RAS_src/Cascades/haarcascade_frontalface_default.xml"
+                cascadePath = "/home/pi/RAS_src/face_data/Cascades/haarcascade_frontalface_default.xml"
                 faceCascade = cv2.CascadeClassifier(cascadePath);
 
                 # 顔検出を行う

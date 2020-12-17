@@ -64,14 +64,14 @@ class db_func:
             )
     
 
-    def create_user(self, student_id, user_name, full_name, token):
+    def create_user(self, student_id, user_name, full_name, token, mac_addr):
         try:
             cur = self.conn.cursor()
             # クエリを作成
             query = """
-                INSERT INTO user (student_id, name, full_name, token) 
-                VALUES ('{0}','{1}','{2}','{3}');
-                """.format(student_id, user_name, full_name,token)
+                INSERT INTO user (student_id, name, full_name, token, mac_addr) 
+                VALUES ('{0}','{1}','{2}','{3}', '{4}');
+                """.format(student_id, user_name, full_name,token, mac_addr)
 
             print("")
             print("ユーザの作成")
@@ -137,6 +137,8 @@ class db_func:
 
             # 接続できているかどうか確認
             print("get_where : {0}".format(self.conn.is_connected()))
+
+            cur = self.conn.cursor()
                 
         
         if type(value) is str:

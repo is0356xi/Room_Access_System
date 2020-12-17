@@ -4,7 +4,7 @@ import json
 
 
 class kafka_func():
-    def __init__(self, topic_name, prod_flag):
+    def __init__(self, topic_name, prod_flag=True):
         self.topic_name = topic_name
 
         if prod_flag == True:
@@ -15,12 +15,12 @@ class kafka_func():
 
 
     def send_data(self, data):
-        future = self.producer.send(self.topic_name, data.encode()).get(timeout=10)
+        future = self.producer.send(self.topic_name, data.encode()).get(timeout=20)
         print("send: {0}".format(data))
 
     def send_json(self, dict_data):
         self.producer = KafkaProducer(bootstrap_servers='192.168.100.68:9092', value_serializer=lambda m: json.dumps(m).encode('ascii'))
-        future = self.producer.send(self.topic_name, dict_data).get(timeout=10)
+        future = self.producer.send(self.topic_name, dict_data).get(timeout=20)
 
         print("send: dict_data")
 

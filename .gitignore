@@ -2,3 +2,4 @@
 *cfg.json
 *.jpg
 *.pyc
+src/pi_src/trainer/trainer.yml
