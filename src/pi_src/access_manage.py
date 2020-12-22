@@ -15,6 +15,7 @@ class access:
         today = datetime.date.today()
 
         # 補正時刻
+        min_time = time.strftime('%Y-%m-%d 09:00:32')
         max_time = time.strftime('%Y-%m-%d 21:58:12')
 
         # クエリに含める情報の設定
@@ -34,6 +35,11 @@ class access:
 
         # 入退室に関する記録がない場合
         if len(access_info) == 0:
+
+            dt_min = dt.strptime(min_time, '%Y-%m-%d %H:%M:%S')
+            dt_now = dt.strptime(now, '%Y-%m-%d %H:%M:%S')
+            if dt_min > dt_now:
+                now = dt_min
             
             self.db.access_info_manage(user_id, today, now ,True)
             print("")

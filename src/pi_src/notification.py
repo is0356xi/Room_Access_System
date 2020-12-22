@@ -5,7 +5,6 @@ import time
 import datetime
 from datetime import datetime as dt
 
-
 class notify:
     def __init__(self):
         # データベースへの接続
@@ -29,6 +28,7 @@ class notify:
         access_info = self.db.get_access_info(field_name, wh_field ,today)
 
         self.access_info = access_info
+        access_info.sort()
 
         print(access_info)
 
@@ -38,6 +38,8 @@ class notify:
         for value in self.access_info:
             user_id = value[0]
             user_id_list.append(user_id)
+            
+            user_id_list.sort()
 
         # sqlの構文では, リスト:[] ではなく タプル:()
         if len(user_id_list) == 1:
@@ -80,4 +82,4 @@ if __name__ == "__main__":
     notify.access_user_search()
     notify.get_user_info()
     notify.form_info_create()
-    notify.line_push()
+    # notify.line_push()
