@@ -38,7 +38,7 @@ class notify:
         for value in self.access_info:
             user_id = value[0]
             user_id_list.append(user_id)
-            
+
             user_id_list.sort()
 
         # sqlの構文では, リスト:[] ではなく タプル:()
@@ -77,8 +77,6 @@ class notify:
     def line_push(self):
         self.line.line_push(self.form_info)
 
-    def line_push_pre(self):
-        self.line.line_push_pre(self.form_info)
 
 if __name__ == "__main__":
     notify = notify()
