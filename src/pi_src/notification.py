@@ -70,12 +70,15 @@ class notify:
                     "token" : user[3],
                     "access_time" : access_time
             }
- 
+
             self.form_info.append(form_dic)
             print(self.form_info)
 
     def line_push(self):
         self.line.line_push(self.form_info)
+
+    def line_push_pre(self):
+        self.line.line_push_pre(self.form_info)
 
 if __name__ == "__main__":
     notify = notify()
