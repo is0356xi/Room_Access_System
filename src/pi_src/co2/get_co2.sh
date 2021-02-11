@@ -7,4 +7,4 @@ if [ $? -gt 0 ]; then
 	exit 1;
 fi
 
-../python-venv/RAS/bin/python send_co2.py ${co2} "${date}"
+~/python-venv/RAS/bin/python send_co2.py ${co2} "${date}"

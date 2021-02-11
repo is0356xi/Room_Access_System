@@ -1,4 +1,7 @@
-import db_func
+import sys
+sys.path.append('../')
+
+from db_src import db_func
 import requests
 
 class line_func:
@@ -6,13 +9,6 @@ class line_func:
         # LINE通知APIのエンドポイント
         self.line_notify_api = 'https://notify-api.line.me/api/notify'
 
-        # Googleフォームの情報
-        # self.url = "https://docs.google.com/forms/d/e/1FAIpQLSf-ZVJL-6nDNftQTqkWdvncSpnYwObAXZaObIuB6_m-WWhmzw/viewform?"
-        # self.entry = {
-        #     "name": 2005620554,
-        #     "id": 1045781291,
-        #     "time": 1065046570
-        # }
 
         self.url = "https://docs.google.com/forms/d/e/1FAIpQLSe2DgXoLpk_eTF6tRuUSNpciWYgyl02TWsGlhp-HbrxPkxvrw/viewform?"
         self.entry = {
@@ -46,7 +42,6 @@ class line_func:
             }
         }
 
-
     def line_push_test(self, msg):
         headers = {'Authorization': f'Bearer {self.token}'}
         data = {'message': f'message: {msg}'}
@@ -78,7 +73,6 @@ class line_func:
             status = requests.post(self.line_notify_api, headers = headers, data = data)
 
             print(status)
-
 
     # Googleフォームの事前入室登録
     def line_push_pre(self, user_list):

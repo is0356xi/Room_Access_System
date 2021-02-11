@@ -10,7 +10,7 @@ class db_func:
         # コネクションの作成
         self.conn = mydb.connect(
             user='ras',
-            host='192.168.100.68',
+            host='192.168.100.58',
             port='3306',
             password='InfoNetworking',
             database='ras_db'
@@ -64,14 +64,14 @@ class db_func:
             )
     
 
-    def create_user(self, student_id, user_name, full_name, token, mac_addr):
+    def create_user(self, student_id, user_name, full_name, token, mac_addr, email):
         try:
             cur = self.conn.cursor()
             # クエリを作成
             query = """
-                INSERT INTO user (student_id, name, full_name, token, mac_addr) 
-                VALUES ('{0}','{1}','{2}','{3}', '{4}');
-                """.format(student_id, user_name, full_name,token, mac_addr)
+                INSERT INTO user (student_id, name, full_name, token, mac_addr, email) 
+                VALUES ('{0}','{1}','{2}','{3}', '{4}', '{5}');
+                """.format(student_id, user_name, full_name,token, mac_addr, email)
 
             print("")
             print("ユーザの作成")

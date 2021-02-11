@@ -1,1 +1,0 @@
-sudo tcpdump -w ~/pcap/wlan-%F-%T.pcap -G 6 -i wlan0 type data subtype null -s 42

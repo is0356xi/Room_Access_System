@@ -3,3 +3,5 @@
 *.jpg
 *.pyc
 src/pi_src/trainer/trainer.yml
+src/pi_src/myapp/FireBaseConfig.json
+src/pi_src/face/trainer/trainer.yml

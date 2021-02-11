@@ -6,12 +6,13 @@ import json
 class kafka_func():
     def __init__(self, topic_name, prod_flag=True):
         self.topic_name = topic_name
+        self.server = '192.168.100.60:9092'
 
         if prod_flag == True:
-            self.producer = KafkaProducer(bootstrap_servers='192.168.100.68:9092')
+            self.producer = KafkaProducer(bootstrap_servers=self.server)
             print(self.producer.bootstrap_connected())
         else:
-            self.consumer = KafkaConsumer(topic_name, bootstrap_servers='192.168.100.68:9092')
+            self.consumer = KafkaConsumer(topic_name, bootstrap_servers=self.server)
 
 
     def send_data(self, data):
@@ -19,7 +20,7 @@ class kafka_func():
         print("send: {0}".format(data))
 
     def send_json(self, dict_data):
-        self.producer = KafkaProducer(bootstrap_servers='192.168.100.68:9092', value_serializer=lambda m: json.dumps(m).encode('ascii'))
+        self.producer = KafkaProducer(bootstrap_servers=self.server, value_serializer=lambda m: json.dumps(m).encode('ascii'))
         future = self.producer.send(self.topic_name, dict_data).get(timeout=20)
 
         print("send: dict_data")
@@ -31,7 +32,7 @@ class kafka_func():
 
     def recv_json(self):
         self.consumer = KafkaConsumer(self.topic_name, 
-            bootstrap_servers='192.168.100.68:9092', 
+            bootstrap_servers=self.server, 
             value_deserializer=lambda m: json.loads(m.decode('ascii')))
 
         for msg in self.consumer:
