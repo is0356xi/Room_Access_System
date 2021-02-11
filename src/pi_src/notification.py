@@ -101,6 +101,7 @@ class notify:
     def line_push(self):
         self.line.line_push(self.form_info)
 
+
 if __name__ == "__main__":
     notify = notify()
     notify.access_user_search()
