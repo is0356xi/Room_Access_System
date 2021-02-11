@@ -42,7 +42,6 @@ class line_func:
             }
         }
 
-    
     def line_push_test(self, msg):
         headers = {'Authorization': f'Bearer {self.token}'}
         data = {'message': f'message: {msg}'}
@@ -84,6 +83,7 @@ class line_func:
             # ユーザ情報の取得
             full_name = user_dic["full_name"]
             student_id = user_dic["student_id"]
+            access_time = user_dic["access_time"]
             token = user_dic["token"]
 
 
@@ -130,4 +130,5 @@ class line_func:
 
 if __name__ == "__main__":
     line = line_func()
+    line.line_push_pre()
 
