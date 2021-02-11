@@ -1,0 +1,20 @@
+<!doctype html>
+<html>
+<head>
+<title>{{ title }}</title>
+</head>
+{% with messages = get_flashed_messages() %}
+  {% if messages %}
+    <ul class=flashes>
+    {% for message in messages %}
+      <li>{{ message }}</li>
+    {% endfor %}
+    </ul>
+  {% endif %}
+{% endwith %}
+<body>
+{% block content %}
+<!-- ここにメインコンテンツを書く -->
+{% endblock %}
+</body>
+</html>

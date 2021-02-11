@@ -1,4 +1,6 @@
 import sys
+sys.path.append('../')
+
 import cv2
 import time
 import datetime
@@ -6,7 +8,7 @@ import csv
 import os
 import pandas as pd
 
-import db_func
+from db_src import db_func
 
 
 class capture_db():
@@ -163,7 +165,7 @@ class capture_db():
 
                 gray = cv2.cvtColor(img,cv2.COLOR_BGR2GRAY)
 
-                cascadePath = "/home/pi/RAS_src/face_data/Cascades/haarcascade_frontalface_default.xml"
+                cascadePath = "Cascades/haarcascade_frontalface_default.xml"
                 faceCascade = cv2.CascadeClassifier(cascadePath);
 
                 # 顔検出を行う
@@ -172,7 +174,7 @@ class capture_db():
                 # 顔が検出された場合
                 if len(faces) == 1:
                     # そのときの画像を保存する
-                    cv2.imwrite("images/{0}.{1}.{2}.jpg".format(user_name,user_id, img_num),img)
+                    cv2.imwrite("face/images/{0}.{1}.{2}.jpg".format(user_name,user_id, img_num),img)
 
                     print("{0}枚目の画像を撮影しました".format(img_num))
                     img_num = img_num + 1

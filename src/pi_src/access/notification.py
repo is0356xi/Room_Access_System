@@ -1,9 +1,13 @@
-import line_func
-import db_func
+import sys
+sys.path.append('../')
+
+from line import line_func
+from db_src import db_func
 import access_manage
 import time
 import datetime
 from datetime import datetime as dt
+from datetime import timedelta
 
 class notify:
     def __init__(self):
@@ -32,19 +36,24 @@ class notify:
 
         print(access_info)
 
-    def get_user_info(self):
+    def get_user_info(self, resv_flag=False):
         user_id_list = []
         # ユーザidを取り出す
-        for value in self.access_info:
-            user_id = value[0]
-            user_id_list.append(user_id)
-            
-            user_id_list.sort()
+        if not resv_flag:
+            for value in self.access_info:
+                user_id = value[0]
+                user_id_list.append(user_id)
+                
+                user_id_list.sort()
 
-        # sqlの構文では, リスト:[] ではなく タプル:()
-        if len(user_id_list) == 1:
-            user_id_list = 1
+            # sqlの構文では, リスト:[] ではなく タプル:()
+            if len(user_id_list) == 1:
+                user_id_list = 1
+            else:
+                user_id_list = tuple(user_id_list)
         else:
+            user_num = 6
+            user_id_list = list(range(1, user_num))
             user_id_list = tuple(user_id_list)
 
         user_info = self.db.get_user_list(user_id_list)
@@ -70,9 +79,24 @@ class notify:
                     "token" : user[3],
                     "access_time" : access_time
             }
- 
+
             self.form_info.append(form_dic)
             print(self.form_info)
+
+    
+    def resv_info_create(self):
+        self.resv_info = []
+
+        for user in self.user_info:
+
+            form_dic = {
+                    "full_name" : user[1],
+                    "student_id": user[2],
+                    "token" : user[3]
+            }
+ 
+            self.resv_info.append(form_dic)
+            print(self.resv_info)
 
     def line_push(self):
         self.line.line_push(self.form_info)
@@ -82,4 +106,4 @@ if __name__ == "__main__":
     notify.access_user_search()
     notify.get_user_info()
     notify.form_info_create()
-    # notify.line_push()
+    notify.line_push()

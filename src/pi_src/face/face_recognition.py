@@ -1,14 +1,17 @@
+import sys
+sys.path.append('../')
+
 import cv2
 import numpy as np
 import os 
 import pandas as pd
 import requests
 import time
-import line_func
-import db_func
-import access_manage
-import audio_output
-import kafka_func
+from line import line_func
+from db_src import db_func
+from access import access_manage
+from access import audio_output
+from kafka_src import kafka_func
 import datetime
 from datetime import datetime as dt
 
@@ -63,8 +66,8 @@ class face_rec:
 
     def recognition(self):
         recognizer = cv2.face.LBPHFaceRecognizer_create()
-        recognizer.read('/home/pi/RAS_src/trainer/trainer.yml')
-        cascadePath = "/home/pi/RAS_src/Cascades/haarcascade_frontalface_default.xml"
+        recognizer.read('trainer/trainer.yml')
+        cascadePath = "Cascades/haarcascade_frontalface_default.xml"
         faceCascade = cv2.CascadeClassifier(cascadePath)
 
         font = cv2.FONT_HERSHEY_SIMPLEX
