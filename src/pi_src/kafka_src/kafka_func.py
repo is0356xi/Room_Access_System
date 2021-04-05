@@ -1,6 +1,7 @@
 from kafka import KafkaProducer
 from kafka import KafkaConsumer
 import json
+import re
 
 
 class kafka_func():
@@ -21,6 +22,13 @@ class kafka_func():
 
     def send_json(self, dict_data):
         self.producer = KafkaProducer(bootstrap_servers=self.server, value_serializer=lambda m: json.dumps(m).encode('ascii'))
+
+        # dst_ipを正規表現を用いて生成 --> 辞書に追加
+        pattern = '.*?:'
+        result = re.match(pattern, self.server)
+        dst_ip = result.group()[:-1]
+        dict_data["dst_ip"] = dst_ip
+        print(dict_data)
         future = self.producer.send(self.topic_name, dict_data).get(timeout=20)
 
         print("send: dict_data")

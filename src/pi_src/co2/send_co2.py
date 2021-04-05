@@ -31,9 +31,7 @@ def get_ip():
 def main():
     topic_name = "co2-rpi1"
     kafka = kafka_func.kafka_func(topic_name, True)
-
-    data = dict(co2=int(args[1]), time=args[2], device_id="Rpi1", ip=get_ip())
-    print(data)
+    data = dict(co2=int(args[1]), time=args[2], device_id="Rpi1", src_ip=get_ip())
     kafka.send_json(data)
 
 if __name__ == "__main__":
