@@ -1,13 +1,13 @@
+from datetime import timedelta
+from datetime import datetime as dt
+import datetime
+import time
+import access_manage
+from db_src import db_func
+from line import line_func
 import sys
 sys.path.append('../')
 
-from line import line_func
-from db_src import db_func
-import access_manage
-import time
-import datetime
-from datetime import datetime as dt
-from datetime import timedelta
 
 class notify:
     def __init__(self):
@@ -20,7 +20,6 @@ class notify:
         # 入退室情報を管理機能
         self.access = access_manage.access()
 
-
     def access_user_search(self):
         now = time.strftime('%Y-%m-%d %H:%M:%S')
         today = datetime.date.today()
@@ -29,7 +28,7 @@ class notify:
         wh_field = "date"
 
         # 今日の入退室記録がある人を検索
-        access_info = self.db.get_access_info(field_name, wh_field ,today)
+        access_info = self.db.get_access_info(field_name, wh_field, today)
 
         self.access_info = access_info
         access_info.sort()
@@ -43,7 +42,7 @@ class notify:
             for value in self.access_info:
                 user_id = value[0]
                 user_id_list.append(user_id)
-                
+
                 user_id_list.sort()
 
             # sqlの構文では, リスト:[] ではなく タプル:()
@@ -61,40 +60,39 @@ class notify:
         self.user_info = user_info
         print(user_info)
 
-
     def form_info_create(self):
         self.form_info = []
 
         for (user, access) in zip(self.user_info, self.access_info):
-            date = str(access[1]) + "%20"
-            entry_time = str(access[2])[11:16]
-            exit_time = str(access[3])[11:16]
-
-            access_time = date + entry_time + "~" +exit_time
-            print(access_time)
+            date = str(int(str(access[1]).split('-')[1])) + \
+                '/' + str(int(str(access[1]).split('-')[2]))
+            entry_time = str(access[2])[11:15] + '0'
+            exit_time = str(access[3])[11:15] + '0'
 
             form_dic = {
-                    "full_name" : user[1],
-                    "student_id": user[2],
-                    "token" : user[3],
-                    "access_time" : access_time
+                "full_name": user[1],
+                "student_id": user[2],
+                "token": user[3],
+                "date": date,
+                "entry_time": entry_time,
+                "exit_time": exit_time,
+                "remarks": '研究'
             }
 
             self.form_info.append(form_dic)
             print(self.form_info)
 
-    
     def resv_info_create(self):
         self.resv_info = []
 
         for user in self.user_info:
 
             form_dic = {
-                    "full_name" : user[1],
-                    "student_id": user[2],
-                    "token" : user[3]
+                "full_name": user[1],
+                "student_id": user[2],
+                "token": user[3]
             }
- 
+
             self.resv_info.append(form_dic)
             print(self.resv_info)
 

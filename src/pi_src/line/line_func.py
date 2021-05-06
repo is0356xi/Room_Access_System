@@ -9,12 +9,14 @@ class line_func:
         # LINE通知APIのエンドポイント
         self.line_notify_api = 'https://notify-api.line.me/api/notify'
 
-
-        self.url = "https://docs.google.com/forms/d/e/1FAIpQLSe2DgXoLpk_eTF6tRuUSNpciWYgyl02TWsGlhp-HbrxPkxvrw/viewform?"
+        self.url = "https://docs.google.com/forms/d/e/1FAIpQLSdQNoIoN3F4pquJUyfDlPAIp9Fap8oVz0ctdlFmVJ7aDBRJMA/viewform?"
         self.entry = {
-            "name": 208832475,
-            "id": 913668226,
-            "time": 1243542068
+            "name": 624253739,
+            "id": 1187524162,
+            "date": 1022740477,
+            "entry_time": 1008745151,
+            "exit_time": 1723410308,
+            "remarks": 1603137828
         }
 
         # Googleフォームの事前入室登録
@@ -42,6 +44,7 @@ class line_func:
             }
         }
 
+
     def line_push_test(self, msg):
         headers = {'Authorization': f'Bearer {self.token}'}
         data = {'message': f'message: {msg}'}
@@ -57,15 +60,21 @@ class line_func:
             # ユーザ情報の取得
             full_name = user_dic["full_name"]
             student_id = user_dic["student_id"]
-            access_time = user_dic["access_time"]
+            date = user_dic["date"]
+            entry_time = user_dic["entry_time"]
+            exit_time = user_dic["exit_time"]
+            remarks = user_dic["remarks"]
             token = user_dic["token"]
 
             # GoogleフォームのURLを生成
             name = "entry.{0}={1}&".format(self.entry["name"], full_name)
             id = "entry.{0}={1}&".format(self.entry["id"], student_id)
-            time = "entry.{0}={1}".format(self.entry["time"], access_time)
+            date = "entry.{0}={1}&".format(self.entry["date"], date)
+            entry_time = "entry.{0}={1}&".format(self.entry["entry_time"], entry_time)
+            exit_time = "entry.{0}={1}&".format(self.entry["exit_time"], exit_time)
+            remarks = "entry.{0}={1}&".format(self.entry["remarks"], remarks)
 
-            url = self.url + name + id + time
+            url = self.url + name + id + date + entry_time + exit_time + remarks
 
             # ポストする
             headers = {'Authorization': f'Bearer {token}'}
@@ -83,7 +92,6 @@ class line_func:
             # ユーザ情報の取得
             full_name = user_dic["full_name"]
             student_id = user_dic["student_id"]
-            access_time = user_dic["access_time"]
             token = user_dic["token"]
 
 
@@ -130,5 +138,4 @@ class line_func:
 
 if __name__ == "__main__":
     line = line_func()
-    line.line_push_pre()
 
